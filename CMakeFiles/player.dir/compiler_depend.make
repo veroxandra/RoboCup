@@ -186,21 +186,31 @@ CMakeFiles/player.dir/main.cpp.o: main.cpp \
   /usr/include/c++/11/bits/stl_vector.h \
   /usr/include/c++/11/bits/stl_bvector.h \
   /usr/include/c++/11/bits/vector.tcc \
-  _deps/min_sock-src/src/header/MinimalSocket/udp/UdpSocket.h \
-  _deps/min_sock-src/src/header/MinimalSocket/NonCopiable.h \
-  _deps/min_sock-src/src/header/MinimalSocket/core/Receiver.h \
-  _deps/min_sock-src/src/header/MinimalSocket/core/Address.h \
-  /usr/include/c++/11/optional \
+  /usr/include/c++/11/thread \
+  /usr/include/c++/11/bits/std_thread.h \
+  /usr/include/c++/11/tuple \
   /usr/include/c++/11/utility \
   /usr/include/c++/11/bits/stl_relops.h \
-  /usr/include/c++/11/bits/enable_special_members.h \
-  _deps/min_sock-src/src/header/MinimalSocket/core/Socket.h \
-  _deps/min_sock-src/src/header/MinimalSocket/core/Definitions.h \
+  /usr/include/c++/11/array \
+  /usr/include/c++/11/bits/uses_allocator.h \
+  /usr/include/c++/11/bits/invoke.h \
+  /usr/include/c++/11/bits/refwrap.h \
+  /usr/include/c++/11/bits/unique_ptr.h \
+  /usr/include/c++/11/bits/this_thread_sleep.h \
   /usr/include/c++/11/chrono \
   /usr/include/c++/11/ratio \
   /usr/include/c++/11/limits \
   /usr/include/c++/11/ctime \
   /usr/include/c++/11/bits/parse_numbers.h \
+  funciones.h \
+  _deps/min_sock-src/src/header/MinimalSocket/udp/UdpSocket.h \
+  _deps/min_sock-src/src/header/MinimalSocket/NonCopiable.h \
+  _deps/min_sock-src/src/header/MinimalSocket/core/Receiver.h \
+  _deps/min_sock-src/src/header/MinimalSocket/core/Address.h \
+  /usr/include/c++/11/optional \
+  /usr/include/c++/11/bits/enable_special_members.h \
+  _deps/min_sock-src/src/header/MinimalSocket/core/Socket.h \
+  _deps/min_sock-src/src/header/MinimalSocket/core/Definitions.h \
   /usr/include/c++/11/atomic \
   /usr/include/c++/11/bits/atomic_base.h \
   /usr/include/c++/11/bits/atomic_lockfree_defines.h \
@@ -209,15 +219,9 @@ CMakeFiles/player.dir/main.cpp.o: main.cpp \
   /usr/include/c++/11/bits/stl_raw_storage_iter.h \
   /usr/include/c++/11/bits/align.h \
   /usr/include/c++/11/bit \
-  /usr/include/c++/11/bits/uses_allocator.h \
-  /usr/include/c++/11/bits/unique_ptr.h \
-  /usr/include/c++/11/tuple \
-  /usr/include/c++/11/array \
-  /usr/include/c++/11/bits/invoke.h \
   /usr/include/c++/11/bits/shared_ptr.h \
   /usr/include/c++/11/bits/shared_ptr_base.h \
   /usr/include/c++/11/bits/allocated_ptr.h \
-  /usr/include/c++/11/bits/refwrap.h \
   /usr/include/c++/11/ext/aligned_buffer.h \
   /usr/include/c++/11/ext/concurrence.h \
   /usr/include/c++/11/bits/shared_ptr_atomic.h \
@@ -247,15 +251,19 @@ _deps/min_sock-src/src/header/MinimalSocket/core/SocketContext.h:
 
 /usr/include/c++/11/bits/unique_lock.h:
 
-/usr/include/c++/11/bits/refwrap.h:
-
-/usr/include/c++/11/array:
-
-/usr/include/c++/11/bits/uses_allocator.h:
-
 /usr/include/c++/11/bits/stl_raw_storage_iter.h:
 
 /usr/include/c++/11/memory:
+
+_deps/min_sock-src/src/header/MinimalSocket/core/Socket.h:
+
+/usr/include/c++/11/bits/enable_special_members.h:
+
+_deps/min_sock-src/src/header/MinimalSocket/core/Address.h:
+
+_deps/min_sock-src/src/header/MinimalSocket/core/Receiver.h:
+
+_deps/min_sock-src/src/header/MinimalSocket/NonCopiable.h:
 
 /usr/include/c++/11/bits/shared_ptr_atomic.h:
 
@@ -265,17 +273,15 @@ _deps/min_sock-src/src/header/MinimalSocket/core/SocketContext.h:
 
 /usr/include/c++/11/ratio:
 
-_deps/min_sock-src/src/header/MinimalSocket/core/Socket.h:
+/usr/include/c++/11/bits/refwrap.h:
 
-/usr/include/c++/11/bits/enable_special_members.h:
+/usr/include/c++/11/bits/uses_allocator.h:
+
+/usr/include/c++/11/array:
 
 /usr/include/c++/11/bits/stl_relops.h:
 
-_deps/min_sock-src/src/header/MinimalSocket/core/Address.h:
-
-_deps/min_sock-src/src/header/MinimalSocket/core/Receiver.h:
-
-_deps/min_sock-src/src/header/MinimalSocket/NonCopiable.h:
+/usr/include/c++/11/bits/std_thread.h:
 
 /usr/include/c++/11/optional:
 
@@ -343,6 +349,8 @@ _deps/min_sock-src/src/header/MinimalSocket/NonCopiable.h:
 
 /usr/include/c++/11/cerrno:
 
+/usr/include/c++/11/thread:
+
 /usr/include/stdio.h:
 
 /usr/include/c++/11/chrono:
@@ -352,6 +360,8 @@ _deps/min_sock-src/src/header/MinimalSocket/NonCopiable.h:
 /usr/include/c++/11/bits/std_abs.h:
 
 /usr/include/alloca.h:
+
+funciones.h:
 
 /usr/include/x86_64-linux-gnu/bits/stdlib-float.h:
 
@@ -457,9 +467,9 @@ _deps/min_sock-src/src/header/MinimalSocket/core/Sender.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h:
 
-/usr/include/c++/11/bits/unique_ptr.h:
-
 _deps/min_sock-src/src/header/MinimalSocket/udp/UdpSocket.h:
+
+/usr/include/c++/11/bits/unique_ptr.h:
 
 /usr/include/c++/11/ostream:
 
@@ -702,5 +712,7 @@ main.cpp:
 /usr/include/c++/11/bits/cxxabi_forced.h:
 
 /usr/include/c++/11/ext/alloc_traits.h:
+
+/usr/include/c++/11/bits/this_thread_sleep.h:
 
 /usr/include/c++/11/bits/stl_construct.h:
