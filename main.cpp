@@ -38,78 +38,24 @@ int main(int argc, char* argv[])
         // resized to the nunber of bytes
         // actually received
         std::string received_message_content = received_message->received_message;
-        cout << received_message_content << endl;
-        string jugador=vectorpalabras(received_message_content).at(2);
+        //cout << received_message_content << endl;
+
+        Jugador jugador;
+                jugador.numero = stoi(vectorpalabras(received_message_content).at(2));
+                if (vectorpalabras(received_message_content).at(1) == "l"){
+                    jugador.equipo = -1;
+                }else{
+                    jugador.equipo = 1;
+                }
         vector <string>palabras=vectorpalabras(received_message_content);
 
         for(const auto &palabra : palabras) {
-              cout << palabra << endl;
+              //cout << palabra << endl;
           }
         MinimalSocket::Address server_udp = MinimalSocket::Address{"127.0.0.1", other_sender_udp.getPort()};
-        vector<Posicion> posiciones={{50,0},{35,-20},{35,20},{20,-25},{18,-9},{18,5},{20,20},{2,-18},{28,-18},{35,11},{5,0}};
-        //if(vectorpalabras(received_message_content).at(1)=="l"){
-            for(auto &p:posiciones){
-                p.x=-p.x;
-            //}
-        }
-        int player= stoi(jugador);
 
-                switch(player){
-                    case 1:
-                        udp_socket.sendTo(crearMove(posiciones.at(0)), server_udp);
-                        cout << crearMove(posiciones.at(0)) << endl;
-                        break;
-                    case 2:
-                        udp_socket.sendTo(crearMove(posiciones.at(1)), server_udp);
-                        cout << crearMove(posiciones.at(1)) << endl;
+        PosicionarJugador(jugador, server_udp,udp_socket,argumentoString);
 
-                        break;
-                    case 3:
-                        udp_socket.sendTo(crearMove(posiciones.at(2)), server_udp);
-                        cout << crearMove(posiciones.at(2)) << endl;
-
-                        break;
-                    case 4:
-                        udp_socket.sendTo(crearMove(posiciones.at(3)), server_udp);
-                        cout << crearMove(posiciones.at(3)) << endl;
-
-                        break;
-                    case 5:
-                        udp_socket.sendTo(crearMove(posiciones.at(4)), server_udp);
-                        cout << crearMove(posiciones.at(4)) << endl;
-
-                        break;
-                    case 6:
-                        udp_socket.sendTo(crearMove(posiciones.at(5)), server_udp);
-                        cout << crearMove(posiciones.at(5)) << endl;
-                        break;
-                    case 7:
-                        udp_socket.sendTo(crearMove(posiciones.at(6)), server_udp);
-                        cout << crearMove(posiciones.at(6)) << endl;
-
-                        break;
-                    case 8:
-                        udp_socket.sendTo(crearMove(posiciones.at(7)), server_udp);
-                        cout << crearMove(posiciones.at(7)) << endl;
-
-                        break;
-                    case 9:
-                        udp_socket.sendTo(crearMove(posiciones.at(8)), server_udp);
-                        cout << crearMove(posiciones.at(8)) << endl;
-                        break;
-                    case 10:
-                        udp_socket.sendTo(crearMove(posiciones.at(9)), server_udp);
-                        cout << crearMove(posiciones.at(9)) << endl;
-                        break;
-                    case 11:
-                        udp_socket.sendTo(crearMove(posiciones.at(10)), server_udp);
-                        cout << crearMove(posiciones.at(10)) << endl;
-                            break;
-                        }
-                if(argumentoString=="pOESIACA"){
-                    std::this_thread::sleep_for(std::chrono::seconds(1)); // Espera 1 segundo
-                    udp_socket.sendTo("(turn 180)", server_udp);
-                }
         while (true)
         {
             auto received_message = udp_socket.receive(message_max_size);
@@ -120,45 +66,55 @@ int main(int argc, char* argv[])
             //cadenas.push_back(tipo);
             cadenas.insert(cadenas.begin(), tipo); // Inserta la primera palabra al principio del vector
             vector<string> valor,vectoria,valor2,porteria;
-            if(tipo=="see"){
-                cout<<"Encontrado el see"<<endl;
+            if(tipo=="see"&&jugador.numero!=1){
+                bool bola=false;
                 for(auto parentesis:cadenas){
-                    cout<<parentesis<<endl;
+                    //cout<<parentesis<<endl;
                     valor=encontrarStringConPrefijo(parentesis,"(b)");//Buscar en todos los parentesis el de (b)
-                    valor2=encontrarStringConPrefijo(parentesis,"(g r)");//Buscar en todos los parentesis el de (b)
+                    if(jugador.equipo==-1){
+                        valor2=encontrarStringConPrefijo(parentesis,"(g r)");//Buscar en todos los parentesis el de (g r)
+                    }else{
+                        valor2=encontrarStringConPrefijo(parentesis,"(g l)");//Buscar en todos los parentesis el de (g l)
+                    }
                     if(valor2.size()>1){
                         porteria=valor2;
+                        for(auto palabra:valor2){
+                            cout <<palabra<<endl;
+                        }
                     }
                     if(valor.size()>1){
+                        bola=true;
                         vectoria=valor;//Guardar vector con los string del (b)
-                        cout <<vectoria[1]<<endl;
+                        //cout <<vectoria[1]<<endl;
                         double variable=stod(vectoria[1]);
-                        cout <<"La variable transformada es:"<<variable<<endl;
+                        //cout <<"La variable transformada es:"<<variable<<endl;
                         if(variable<0.6&&porteria.size()>1){
-                            cout<<"Patadon a la direccion:"<<porteria[2]<<endl;
-                            udp_socket.sendTo("(kick 100 "+porteria[2]+")", server_udp);
+                            cout<<"Patadon a la direccion:"<<porteria[3]<<endl;
+                            udp_socket.sendTo("(kick 30 "+porteria[3]+")", server_udp);
+                        }else if(stod(vectoria[2])>30){
+                            udp_socket.sendTo("(turn "+vectoria[2]+")", server_udp);
                         }else{
-                        udp_socket.sendTo("(dash 50 "+vectoria[2]+")", server_udp);
+                        //udp_socket.sendTo("(dash 50 "+vectoria[2]+")", server_udp);
+                        udp_socket.sendTo("(dash 50 0)", server_udp);
                         }
                     }else{
-                        //udp_socket.sendTo("(turn 90)", server_udp);
+
                     }
                 }
+                if(!bola){
+                    udp_socket.sendTo("(turn 30)", server_udp);
+                    cout <<"No ve na"<<endl;
+                }
                 for(auto palabras:vectoria){
-                    cout<<"Palabra: "<<palabras<<endl;
+                    //cout<<"Palabra: "<<palabras<<endl;
                 }
             }else{
-                cout << "El tipo es: "<<tipo<<endl;
+                //cout << "El tipo es: "<<tipo<<endl;
             }
-            cout << contenido <<endl;//imprime mensaje entero(sin el tipo de mensaje)
+            //cout << contenido <<endl;//imprime mensaje entero(sin el tipo de mensaje)
             for (auto p : cadenas) {
-                cout << p << endl;//imprime los parentesis por separado
+                //cout << p << endl;//imprime los parentesis por separado
             }
-
-            // PROCESS THE DATA AND SEND A COMMAND TO THE SERVER
-
-            //udp_socket.sendTo("(turn 90)", server_upd);
-            //udp_socket.sendTo("(dash 100 0)", server_udp);
             //std::this_thread::sleep_for(std::chrono::seconds(1)); // Espera 1 segundo
 
 
