@@ -66,12 +66,16 @@ int main(int argc, char* argv[])
             //cadenas.push_back(tipo);
             cadenas.insert(cadenas.begin(), tipo); // Inserta la primera palabra al principio del vector
             vector<string> valor,vectoria,valor2,porteria;
-            if(tipo=="see"){
+            if(tipo=="see"&&jugador.numero!=1){
                 bool bola=false;
                 for(auto parentesis:cadenas){
                     //cout<<parentesis<<endl;
                     valor=encontrarStringConPrefijo(parentesis,"(b)");//Buscar en todos los parentesis el de (b)
-                    valor2=encontrarStringConPrefijo(parentesis,"(g r)");//Buscar en todos los parentesis el de (g r)
+                    if(jugador.equipo==-1){
+                        valor2=encontrarStringConPrefijo(parentesis,"(g r)");//Buscar en todos los parentesis el de (g r)
+                    }else{
+                        valor2=encontrarStringConPrefijo(parentesis,"(g l)");//Buscar en todos los parentesis el de (g l)
+                    }
                     if(valor2.size()>1){
                         porteria=valor2;
                         for(auto palabra:valor2){
@@ -87,13 +91,14 @@ int main(int argc, char* argv[])
                         if(variable<0.6&&porteria.size()>1){
                             cout<<"Patadon a la direccion:"<<porteria[3]<<endl;
                             udp_socket.sendTo("(kick 30 "+porteria[3]+")", server_udp);
-                        }else if(stod(vectoria[2])>15){
+                        }else if(stod(vectoria[2])>30){
                             udp_socket.sendTo("(turn "+vectoria[2]+")", server_udp);
                         }else{
                         //udp_socket.sendTo("(dash 50 "+vectoria[2]+")", server_udp);
                         udp_socket.sendTo("(dash 50 0)", server_udp);
                         }
                     }else{
+
                     }
                 }
                 if(!bola){
