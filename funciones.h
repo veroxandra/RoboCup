@@ -7,9 +7,25 @@
 #include <thread> // Para std::this_thread::sleep_for
 #include <chrono> // Para std::chrono::seconds
 #include <MinimalSocket/udp/UdpSocket.h>
+
 using namespace std;
 
-inline vector<string> vectorpalabras(string const &ejercicio){
+struct Posicion{
+    int x;
+    int y;
+};
+
+struct Jugador{
+    int numero;
+    int equipo;
+};
+struct Lectura{
+   string porteria_der;
+   string porteria_izq;
+   string pelota;
+};
+
+vector<string> vectorpalabras(string const &ejercicio){
   vector<string> resultado;
   string aux=ejercicio;
   int pos=aux.find(' ');
@@ -26,11 +42,8 @@ inline vector<string> vectorpalabras(string const &ejercicio){
   resultado.push_back(aux);
   return resultado;
 }
-struct Posicion{
-    int x;
-    int y;
-};
-inline std::string obtenerPrimeraPalabra(string& str) {
+
+string obtenerPrimeraPalabra(string& str) {
     auto pos = str.find(' ');
     string primeraPalabra;
     if (pos != -1) {
@@ -43,7 +56,7 @@ inline std::string obtenerPrimeraPalabra(string& str) {
     return primeraPalabra;
 }
 
-inline vector<string> dividir_en_palabras_parentesis(string const &s){
+vector<string> dividir_en_palabras_parentesis(string const &s){
   vector<string> palabras;
   string palabra;
   char token1 = '(';
@@ -74,7 +87,7 @@ inline vector<string> dividir_en_palabras_parentesis(string const &s){
   return palabras;
 }
 
-inline string crearMove(Posicion pos){
+string crearMove(Posicion pos){
     string movimiento="(move "+to_string(pos.x)+" "+to_string(pos.y)+")";
     return movimiento;
 }
@@ -90,16 +103,53 @@ vector<string> encontrarStringConPrefijo(const string& str, const string& prefij
     }
     return vectorpalabras(""); // Retorna una cadena vacía si no se encuentra el prefijo
 }
-void PosicionarJugador(string &jugador, MinimalSocket::Address server_udp,MinimalSocket::udp::Udp<true>& udp_socket,string argumentoString) {
+
+
+
+
+template<typename T>
+Lectura ClasificaDatos (string &tipo, vector<string>  &cadenas) {
+    vector<string> valor,vectoria,valor2,valor3;
+    Lectura lectura;
+    if(tipo=="see"){
+        //cout<<"Encontrado el see"<<endl;
+        for(auto parentesis:cadenas){
+            //cout<<parentesis<<endl;
+            valor=encontrarStringConPrefijo(parentesis,"(b)");//Buscar en todos los parentesis el de (b)
+            valor2=encontrarStringConPrefijo(parentesis,"(g r)");//Buscar en todos los parentesis el de (g r)
+            valor3=encontrarStringConPrefijo(parentesis,"(g l)");//Buscar en todos los parentesis el de (g l)
+
+            if(valor2.size()>1){
+
+                lectura.porteria_der=(valor2.at(3));
+
+            }
+            if(valor3.size()>1){
+
+                lectura.porteria_izq=(valor3.at(3));
+
+
+            }
+            if(valor.size()>1){
+
+                lectura.pelota=(valor.at(1));
+                            }
+        }
+        return lectura;
+    }
+    return lectura;
+
+}
+
+void PosicionarJugador(Jugador jugador, MinimalSocket::Address server_udp,MinimalSocket::udp::Udp<true>& udp_socket,string argumentoString) {
     vector<Posicion> posiciones={{50,0},{35,-20},{35,20},{20,-25},{18,-9},{18,5},{20,20},{2,-18},{28,-18},{35,11},{5,0}};
     //if(vectorpalabras(received_message_content).at(1)=="l"){
     for(auto &p:posiciones){
         p.x=-p.x;
         //}
     }
-    int player= stoi(jugador);
 
-    switch(player){
+    switch(jugador.numero){
     case 1:
         udp_socket.sendTo(crearMove(posiciones.at(0)), server_udp);
         cout << crearMove(posiciones.at(0)) << endl;
@@ -151,49 +201,13 @@ void PosicionarJugador(string &jugador, MinimalSocket::Address server_udp,Minima
         cout << crearMove(posiciones.at(10)) << endl;
         break;
     }
-    if(argumentoString=="pOESIACA"){
+    if(jugador.equipo == 1){
         std::this_thread::sleep_for(std::chrono::seconds(1)); // Espera 1 segundo
         udp_socket.sendTo("(turn 180)", server_udp);
     }
 
 }
 
-struct Lectura{
-   string porteria_der;
-   string porteria_izq;
-   string pelota;
-};
-template<typename T>
-Lectura ClasificaDatos (string &tipo, vector<string>  &cadenas) {
-    vector<string> valor,vectoria,valor2,valor3;
-    Lectura lectura;
-    if(tipo=="see"){
-        //cout<<"Encontrado el see"<<endl;
-        for(auto parentesis:cadenas){
-            //cout<<parentesis<<endl;
-            valor=encontrarStringConPrefijo(parentesis,"(b)");//Buscar en todos los parentesis el de (b)
-            valor2=encontrarStringConPrefijo(parentesis,"(g r)");//Buscar en todos los parentesis el de (g r)
-            valor3=encontrarStringConPrefijo(parentesis,"(g l)");//Buscar en todos los parentesis el de (g l)
 
-            if(valor2.size()>1){
-
-                lectura.porteria_der=(valor2.at(3));
-
-            }
-            if(valor3.size()>1){
-
-                lectura.porteria_izq=(valor3.at(3));
-
-
-            }
-            if(valor.size()>1){
-
-                lectura.pelota=(valor.at(1));
-                            }
-        }
-        return lectura;
-    }
-    return lectura;
-
-}
 #endif // FUNCIONES_H
+
