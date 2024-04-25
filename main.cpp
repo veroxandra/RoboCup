@@ -56,6 +56,7 @@ int main(int argc, char* argv[])
 
         PosicionarJugador(jugador, server_udp,udp_socket,argumentoString);
         clock.tic();
+
         while (true)
         {
             while (clock.toc() < 100){
@@ -69,6 +70,9 @@ int main(int argc, char* argv[])
             vector<string> cadenas = dividir_en_palabras_parentesis(contenido);
             //cadenas.push_back(tipo);
             cadenas.insert(cadenas.begin(), tipo); // Inserta la primera palabra al principio del vector
+
+
+            auto Estructura = ClasificaDatos<string>(tipo, cadenas);
             vector<string> valor,vectoria,valor2,porteria;
             if(tipo=="see"&&jugador.numero!=1){
                 bool bola=false;
