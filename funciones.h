@@ -159,50 +159,41 @@ void PosicionarJugador(string &jugador, MinimalSocket::Address server_udp,Minima
 }
 
 struct Lectura{
-    string porteria_der;
-    string porteria_izq;
-    string  pelota;
+   string porteria_der;
+   string porteria_izq;
+   string pelota;
 };
 template<typename T>
 Lectura ClasificaDatos (string &tipo, vector<string>  &cadenas) {
     vector<string> valor,vectoria,valor2,valor3;
     Lectura lectura;
     if(tipo=="see"){
-        cout<<"Encontrado el see"<<endl;
+        //cout<<"Encontrado el see"<<endl;
         for(auto parentesis:cadenas){
-            cout<<parentesis<<endl;
+            //cout<<parentesis<<endl;
             valor=encontrarStringConPrefijo(parentesis,"(b)");//Buscar en todos los parentesis el de (b)
             valor2=encontrarStringConPrefijo(parentesis,"(g r)");//Buscar en todos los parentesis el de (g r)
             valor3=encontrarStringConPrefijo(parentesis,"(g l)");//Buscar en todos los parentesis el de (g l)
 
             if(valor2.size()>1){
 
-                lectura.porteria_der=valor2.at(2);
+                lectura.porteria_der=(valor2.at(3));
 
             }
             if(valor3.size()>1){
 
-                lectura.porteria_izq=valor3.at(2);
+                lectura.porteria_izq=(valor3.at(3));
+
 
             }
             if(valor.size()>1){
 
-                lectura.pelota=valor.at(1);
-                vectoria=valor;//Guardar vector con los string del (b)
-                cout <<vectoria[1]<<endl;
-                double variable=stod(vectoria[1]);
-                cout <<"La variable transformada es:"<<variable<<endl;
-
-            }
+                lectura.pelota=(valor.at(1));
+                            }
         }
         return lectura;
-        for(auto palabras:vectoria){
-            cout<<"Palabra: "<<palabras<<endl;
-        }
-
-    }else{
-        cout << "El tipo es: "<<tipo<<endl;
     }
+    return lectura;
 
 }
 #endif // FUNCIONES_H
