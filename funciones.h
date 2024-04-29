@@ -91,9 +91,9 @@ string crearMove(Posicion pos){
 vector<string> encontrarStringConPrefijo(const string& str, const string& prefijo) {//va
     size_t pos = str.find(prefijo);
     if (pos != -1) {
-        cout <<"Encontrado"<<endl;
+        //cout <<"Encontrado"<<endl;
     for(auto d:vectorpalabras(str.substr(pos))){
-        cout << d<<endl;
+        //cout << d<<endl;
     }
         return vectorpalabras(str.substr(pos));
     }
