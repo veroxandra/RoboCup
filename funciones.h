@@ -14,7 +14,6 @@ struct Posicion{
     int x;
     int y;
 };
-
 struct Jugador{
     int numero;
     int equipo;
@@ -24,6 +23,12 @@ struct Lectura{
    string porteria_izq;
    string pelota;
 };
+
+vector<string> referee = {"goal_l_", "goal_r_", "time_up", "half_time", "foul_r", "foul_l", "goalie_catch_ball_r", "goalie_catch_ball_l"};
+
+vector<string> tipo_de_mensajes = {"see", "sense_body"};
+
+vector<string> play_modes = {"before_kick_off", "play_on", "time_over", "kick_off_l", "kick_off_r", "corner_kick_l", "corner_kick_r", "goal_kick_r", "goal_kick_l"};
 
 vector<string> vectorpalabras(string const &ejercicio){
   vector<string> resultado;
@@ -104,17 +109,13 @@ vector<string> encontrarStringConPrefijo(const string& str, const string& prefij
     return vectorpalabras(""); // Retorna una cadena vacía si no se encuentra el prefijo
 }
 
-
-
-
 template<typename T>
 Lectura ClasificaDatos (string &tipo, vector<string>  &cadenas) {
     vector<string> valor,vectoria,valor2,valor3;
     Lectura lectura;
     if(tipo=="see"){
-        //cout<<"Encontrado el see"<<endl;
         for(auto parentesis:cadenas){
-            //cout<<parentesis<<endl;
+
             valor=encontrarStringConPrefijo(parentesis,"(b)");//Buscar en todos los parentesis el de (b)
             valor2=encontrarStringConPrefijo(parentesis,"(g r)");//Buscar en todos los parentesis el de (g r)
             valor3=encontrarStringConPrefijo(parentesis,"(g l)");//Buscar en todos los parentesis el de (g l)
@@ -122,18 +123,15 @@ Lectura ClasificaDatos (string &tipo, vector<string>  &cadenas) {
             if(valor2.size()>1){
 
                 lectura.porteria_der=(valor2.at(3));
-
             }
             if(valor3.size()>1){
 
                 lectura.porteria_izq=(valor3.at(3));
-
-
             }
             if(valor.size()>1){
 
                 lectura.pelota=(valor.at(1));
-                            }
+            }
         }
         return lectura;
     }

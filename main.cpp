@@ -9,9 +9,11 @@
 
 using namespace std;
 
+string Estado;
+Jugador jugador;
+
 int main(int argc, char* argv[])
 {
-    int num;
     string argumentoString = argv[2];
     MinimalSocket::Port this_socket_port = atoi(argv[0]);
     cout << "Creating a UDP socket" << endl;
@@ -40,13 +42,13 @@ int main(int argc, char* argv[])
         std::string received_message_content = received_message->received_message;
         //cout << received_message_content << endl;
 
-        Jugador jugador;
-                jugador.numero = stoi(vectorpalabras(received_message_content).at(2));
-                if (vectorpalabras(received_message_content).at(1) == "l"){
-                    jugador.equipo = -1;
-                }else{
-                    jugador.equipo = 1;
-                }
+        jugador.numero = stoi(vectorpalabras(received_message_content).at(2));
+        if (vectorpalabras(received_message_content).at(1) == "l"){
+            jugador.equipo = -1;
+        }else{
+            jugador.equipo = 1;
+        }
+
         vector <string>palabras=vectorpalabras(received_message_content);
 
         for(const auto &palabra : palabras) {
@@ -55,14 +57,14 @@ int main(int argc, char* argv[])
         MinimalSocket::Address server_udp = MinimalSocket::Address{"127.0.0.1", other_sender_udp.getPort()};
 
         PosicionarJugador(jugador, server_udp,udp_socket,argumentoString);
-        clock.tic();
+        // clock.tic();
 
         while (true)
         {
-            while (clock.toc() < 100){
-                std::this_thread::sleep_for(std::crono:milliseconds(1));
-                }
-            clock.tic();
+            // while (clock.toc() < 100){
+            //     std::this_thread::sleep_for(std::crono:milliseconds(1));
+            //     }
+            // clock.tic();
             auto received_message = udp_socket.receive(message_max_size);
             std::string received_message_content = received_message->received_message;
             string contenido = received_message_content.substr(1, received_message_content.size() - 2);
@@ -70,7 +72,6 @@ int main(int argc, char* argv[])
             vector<string> cadenas = dividir_en_palabras_parentesis(contenido);
             //cadenas.push_back(tipo);
             cadenas.insert(cadenas.begin(), tipo); // Inserta la primera palabra al principio del vector
-
 
             auto Estructura = ClasificaDatos<string>(tipo, cadenas);
             vector<string> valor,vectoria,valor2,porteria;
