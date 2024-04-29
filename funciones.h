@@ -22,9 +22,15 @@ struct Jugador{
 struct Lectura{
    string tipo;
    string porteria_der;
+   string porteria_der_dist;
+
    string porteria_izq;
+   string porteria_izq_dist;
+
    string pelota;
    string pelota_angle;
+   string amigo;
+   string amigo2;
 };
 
 vector<string> vectorpalabras(string const &ejercicio){
@@ -111,7 +117,7 @@ vector<string> encontrarStringConPrefijo(const string& str, const string& prefij
 
 template<typename T>
 Lectura ClasificaDatos (string &tipo, vector<string>  &cadenas) {
-    vector<string> valor,vectoria,valor2,valor3;
+    vector<string> valor,vectoria,valor2,valor3,valor4,valor5;
     Lectura lectura;
     if(tipo=="see"){
         lectura.tipo="see";
@@ -119,16 +125,27 @@ Lectura ClasificaDatos (string &tipo, vector<string>  &cadenas) {
             valor=encontrarStringConPrefijo(parentesis,"(b)");//Buscar en todos los parentesis el de (b)
             valor2=encontrarStringConPrefijo(parentesis,"(g r)");//Buscar en todos los parentesis el de (g r)
             valor3=encontrarStringConPrefijo(parentesis,"(g l)");//Buscar en todos los parentesis el de (g l)
+            valor4 = encontrarStringConPrefijo(parentesis, "\"pOESIACA\" ");
+            valor5 = encontrarStringConPrefijo(parentesis, "\"pOESIAC\" ");
+
 
             if(valor2.size()>1){
                 lectura.porteria_der=(valor2.at(3));
+                lectura.porteria_der_dist=(valor2.at(2));
             }
             if(valor3.size()>1){
                 lectura.porteria_izq=(valor3.at(3));
+                lectura.porteria_izq_dist=(valor3.at(2));
             }
             if(valor.size()>1){
                 lectura.pelota=(valor.at(1));
                 lectura.pelota_angle=(valor.at(2));
+            }
+            if(valor4.size()>1){
+                lectura.amigo=(valor4.at(3));
+            }
+            if(valor5.size()>1){
+                lectura.amigo2=(valor5.at(3));
             }
         }
     }else{
@@ -137,6 +154,11 @@ Lectura ClasificaDatos (string &tipo, vector<string>  &cadenas) {
         lectura.pelota="";
         lectura.pelota_angle="";
         lectura.tipo="";
+        lectura.amigo="";
+        lectura.amigo2="";
+        lectura.porteria_der_dist="";
+        lectura.porteria_izq_dist="";
+
     }
     return lectura;
 }
@@ -206,31 +228,40 @@ void PosicionarJugador(Jugador jugador, MinimalSocket::Address server_udp,Minima
 
 }
 void Accion (const Jugador &jugador,Lectura const &Data, MinimalSocket::Address server_udp,MinimalSocket::udp::Udp<true>& udp_socket){
-    string vectoria,valor2,valor3, porteria;
+    string vectoria,valor2,valor3, porteria,valorpase,distPor;
     if(Data.tipo=="see"){
         bool bola=false;
-            if(jugador.equipo==-1&&Data.porteria_der!=""){
+            if(jugador.equipo==-1){
                 valor2=Data.porteria_der;//Buscar en todos los parentesis el de (g r)
-            }else if(jugador.equipo==1&&Data.porteria_izq!=""){
+                valorpase=Data.amigo2;
+                valor3=Data.porteria_der_dist;//Buscar en todos los parentesis el de (g r)
+            }else if(jugador.equipo==1){
                 valor2=Data.porteria_izq;//Buscar en todos los parentesis el de (g l)
+                valorpase=Data.amigo;
+                valor3=Data.porteria_izq_dist;//Buscar en todos los parentesis el de (g r)
             }
             if(valor2!=""){
                 porteria=valor2;
+                distPor=valor3;
             }
             if(Data.pelota!=""){
                 bola = true;
-                cout <<"Valor pelota:"<<Data.pelota;
-                cout <<vectoria<<endl;
+
                 double variable=stod(Data.pelota);
-                //cout <<"La variable transformada es:"<<variable<<endl;
-                if(variable<0.6&&porteria!=""){
+                if(variable<0.6&&porteria!=""&&stod(distPor)<50){
                     cout<<"Patadon a la direccion:"<<porteria<<endl;
                     udp_socket.sendTo("(kick 30 "+porteria+")", server_udp);
-                }else if(stod(Data.pelota_angle)>30){
+                }else if(variable<0.6&&valorpase!=""){
+                    cout<<"Pasecito a la direccion:"<<valorpase<<endl;
+                    udp_socket.sendTo("(kick 30 "+valorpase+")", server_udp);
+                }else if(variable<0.6&&porteria!=""){
+                    cout<<"Patadon a la direccion:"<<porteria<<endl;
+                    udp_socket.sendTo("(kick 30 "+porteria+")", server_udp);
+                }
+                else if(stod(Data.pelota_angle)>20){
                     udp_socket.sendTo("(turn "+Data.pelota_angle+")", server_udp);
                 }else{
                     udp_socket.sendTo("(dash 50 "+Data.pelota_angle+")", server_udp);
-                    //udp_socket.sendTo("(dash 50 0)", server_udp);
                 }
             }
         if(!bola){
