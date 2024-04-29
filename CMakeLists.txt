@@ -23,7 +23,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/_deps/min_sock-src/src/header)
 link_directories(${CMAKE_CURRENT_SOURCE_DIR}/_deps/min_sock-src/build)
 
 # Añade el archivo funciones.h a la lista de archivos fuente
-add_executable(player main.cpp funciones.h)
+add_executable(player main.cpp tictoc.cpp funciones.h tictoc.h )
 
 # LINK TO MinimalSocket
 target_link_libraries(player MinimalSocket)

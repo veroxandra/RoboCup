@@ -23,6 +23,7 @@ struct Lectura{
    string porteria_der;
    string porteria_izq;
    string pelota;
+   string pelota_angle;
 };
 
 vector<string> vectorpalabras(string const &ejercicio){
@@ -133,7 +134,8 @@ Lectura ClasificaDatos (string &tipo, vector<string>  &cadenas) {
             if(valor.size()>1){
 
                 lectura.pelota=(valor.at(1));
-                            }
+                lectura.pelota_angle=(valor.at(2));
+            }
         }
         return lectura;
     }
@@ -207,7 +209,45 @@ void PosicionarJugador(Jugador jugador, MinimalSocket::Address server_udp,Minima
     }
 
 }
+void Accion (const Jugador &jugador,Lectura const &Data, MinimalSocket::Address server_udp,MinimalSocket::udp::Udp<true>& udp_socket){
+    string valor,vectoria,valor2,valor3, porteria;
+    bool bola=false;
 
+
+                //cout<<parentesis<<endl;
+    valor=Data.pelota;//Buscar en todos los parentesis el de (b)
+    if(jugador.equipo==-1&&Data.porteria_der!=""){
+        valor2=Data.porteria_der;//Buscar en todos los parentesis el de (g r)
+    }else if(jugador.equipo==1&&Data.porteria_izq!=""){
+        valor2=Data.porteria_izq;//Buscar en todos los parentesis el de (g l)
+    }
+    if(valor2!=""){
+        porteria=valor2;
+    }
+    if(Data.pelota!=""){
+        bola = true;
+
+        cout <<vectoria<<endl;
+        double variable=stod(Data.pelota);
+        //cout <<"La variable transformada es:"<<variable<<endl;
+        if(variable<0.6&&porteria!=""){
+            cout<<"Patadon a la direccion:"<<porteria<<endl;
+            udp_socket.sendTo("(kick 30 "+porteria+")", server_udp);
+        }else if(stod(Data.pelota_angle)>30){
+            udp_socket.sendTo("(turn "+Data.pelota_angle+")", server_udp);
+        }else{
+            udp_socket.sendTo("(dash 50 "+Data.pelota_angle+")", server_udp);
+            //udp_socket.sendTo("(dash 50 0)", server_udp);
+        }
+    }else{
+
+    }
+
+    if(!bola){
+        udp_socket.sendTo("(turn 30)", server_udp);
+
+    }
+}
 
 #endif // FUNCIONES_H
 
