@@ -71,14 +71,8 @@ int main(int argc, char* argv[])
             vector<string> cadenas = dividir_en_palabras_parentesis(contenido);
             //cadenas.push_back(tipo);
             cadenas.insert(cadenas.begin(), tipo); // Inserta la primera palabra al principio del vector
-
             auto Estructura = ClasificaDatos<string>(tipo, cadenas);
-
             Accion ( jugador,Estructura, server_udp, udp_socket);
-
-
-
-
         }
         return 0;
     }

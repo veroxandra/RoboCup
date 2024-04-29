@@ -49,12 +49,12 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/player"
          RPATH "")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/home/marcos/Escritorio/Robocup/player")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/home/jose/Desktop/Robocup/Robocup/player")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/player" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/player")
     file(RPATH_CHANGE
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/player"
-         OLD_RPATH "/home/marcos/Escritorio/Robocup/_deps/min_sock-src/build:"
+         OLD_RPATH "/home/jose/Desktop/Robocup/Robocup/_deps/min_sock-src/build:"
          NEW_RPATH "")
     if(CMAKE_INSTALL_DO_STRIP)
       execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/player")
@@ -64,7 +64,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/marcos/Escritorio/Robocup/_deps/min_sock-build/cmake_install.cmake")
+  include("/home/jose/Desktop/Robocup/Robocup/_deps/min_sock-build/cmake_install.cmake")
 
 endif()
 
@@ -76,5 +76,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "//home/marcos/Escritorio/Robocup/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/jose/Desktop/Robocup/Robocup/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

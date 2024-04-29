@@ -9,6 +9,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/jose/Desktop/Robocup/Robocup/main.cpp" "CMakeFiles/player.dir/main.cpp.o" "gcc" "CMakeFiles/player.dir/main.cpp.o.d"
+  "/home/jose/Desktop/Robocup/Robocup/tictoc.cpp" "CMakeFiles/player.dir/tictoc.cpp.o" "gcc" "CMakeFiles/player.dir/tictoc.cpp.o.d"
   )
 
 # Targets to which this target links.

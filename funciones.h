@@ -20,6 +20,7 @@ struct Jugador{
     int equipo;
 };
 struct Lectura{
+   string tipo;
    string porteria_der;
    string porteria_izq;
    string pelota;
@@ -96,9 +97,9 @@ string crearMove(Posicion pos){
 vector<string> encontrarStringConPrefijo(const string& str, const string& prefijo) {//va
     size_t pos = str.find(prefijo);
     if (pos != -1) {
-        cout <<"Encontrado"<<endl;
+        //cout <<"Encontrado"<<endl;
     for(auto d:vectorpalabras(str.substr(pos))){
-        cout << d<<endl;
+        //cout << d<<endl;
     }
         return vectorpalabras(str.substr(pos));
     }
@@ -113,42 +114,37 @@ Lectura ClasificaDatos (string &tipo, vector<string>  &cadenas) {
     vector<string> valor,vectoria,valor2,valor3;
     Lectura lectura;
     if(tipo=="see"){
-        //cout<<"Encontrado el see"<<endl;
+        lectura.tipo="see";
         for(auto parentesis:cadenas){
-            //cout<<parentesis<<endl;
             valor=encontrarStringConPrefijo(parentesis,"(b)");//Buscar en todos los parentesis el de (b)
             valor2=encontrarStringConPrefijo(parentesis,"(g r)");//Buscar en todos los parentesis el de (g r)
             valor3=encontrarStringConPrefijo(parentesis,"(g l)");//Buscar en todos los parentesis el de (g l)
 
             if(valor2.size()>1){
-
                 lectura.porteria_der=(valor2.at(3));
-
             }
             if(valor3.size()>1){
-
                 lectura.porteria_izq=(valor3.at(3));
-
-
             }
             if(valor.size()>1){
-
                 lectura.pelota=(valor.at(1));
                 lectura.pelota_angle=(valor.at(2));
             }
         }
-        return lectura;
+    }else{
+        lectura.porteria_der="";
+        lectura.porteria_izq="";
+        lectura.pelota="";
+        lectura.pelota_angle="";
+        lectura.tipo="";
     }
     return lectura;
-
 }
 
 void PosicionarJugador(Jugador jugador, MinimalSocket::Address server_udp,MinimalSocket::udp::Udp<true>& udp_socket,string argumentoString) {
     vector<Posicion> posiciones={{50,0},{35,-20},{35,20},{20,-25},{18,-9},{18,5},{20,20},{2,-18},{28,-18},{35,11},{5,0}};
-    //if(vectorpalabras(received_message_content).at(1)=="l"){
     for(auto &p:posiciones){
         p.x=-p.x;
-        //}
     }
 
     switch(jugador.numero){
@@ -210,42 +206,36 @@ void PosicionarJugador(Jugador jugador, MinimalSocket::Address server_udp,Minima
 
 }
 void Accion (const Jugador &jugador,Lectura const &Data, MinimalSocket::Address server_udp,MinimalSocket::udp::Udp<true>& udp_socket){
-    string valor,vectoria,valor2,valor3, porteria;
-    bool bola=false;
-
-
-                //cout<<parentesis<<endl;
-    valor=Data.pelota;//Buscar en todos los parentesis el de (b)
-    if(jugador.equipo==-1&&Data.porteria_der!=""){
-        valor2=Data.porteria_der;//Buscar en todos los parentesis el de (g r)
-    }else if(jugador.equipo==1&&Data.porteria_izq!=""){
-        valor2=Data.porteria_izq;//Buscar en todos los parentesis el de (g l)
-    }
-    if(valor2!=""){
-        porteria=valor2;
-    }
-    if(Data.pelota!=""){
-        bola = true;
-
-        cout <<vectoria<<endl;
-        double variable=stod(Data.pelota);
-        //cout <<"La variable transformada es:"<<variable<<endl;
-        if(variable<0.6&&porteria!=""){
-            cout<<"Patadon a la direccion:"<<porteria<<endl;
-            udp_socket.sendTo("(kick 30 "+porteria+")", server_udp);
-        }else if(stod(Data.pelota_angle)>30){
-            udp_socket.sendTo("(turn "+Data.pelota_angle+")", server_udp);
-        }else{
-            udp_socket.sendTo("(dash 50 "+Data.pelota_angle+")", server_udp);
-            //udp_socket.sendTo("(dash 50 0)", server_udp);
+    string vectoria,valor2,valor3, porteria;
+    if(Data.tipo=="see"){
+        bool bola=false;
+            if(jugador.equipo==-1&&Data.porteria_der!=""){
+                valor2=Data.porteria_der;//Buscar en todos los parentesis el de (g r)
+            }else if(jugador.equipo==1&&Data.porteria_izq!=""){
+                valor2=Data.porteria_izq;//Buscar en todos los parentesis el de (g l)
+            }
+            if(valor2!=""){
+                porteria=valor2;
+            }
+            if(Data.pelota!=""){
+                bola = true;
+                cout <<"Valor pelota:"<<Data.pelota;
+                cout <<vectoria<<endl;
+                double variable=stod(Data.pelota);
+                //cout <<"La variable transformada es:"<<variable<<endl;
+                if(variable<0.6&&porteria!=""){
+                    cout<<"Patadon a la direccion:"<<porteria<<endl;
+                    udp_socket.sendTo("(kick 30 "+porteria+")", server_udp);
+                }else if(stod(Data.pelota_angle)>30){
+                    udp_socket.sendTo("(turn "+Data.pelota_angle+")", server_udp);
+                }else{
+                    udp_socket.sendTo("(dash 50 "+Data.pelota_angle+")", server_udp);
+                    //udp_socket.sendTo("(dash 50 0)", server_udp);
+                }
+            }
+        if(!bola){
+            udp_socket.sendTo("(turn 30)", server_udp);
         }
-    }else{
-
-    }
-
-    if(!bola){
-        udp_socket.sendTo("(turn 30)", server_udp);
-
     }
 }
 

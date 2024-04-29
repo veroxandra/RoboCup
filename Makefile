@@ -211,6 +211,30 @@ main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/player.dir/build.make CMakeFiles/player.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+tictoc.o: tictoc.cpp.o
+.PHONY : tictoc.o
+
+# target to build an object file
+tictoc.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/player.dir/build.make CMakeFiles/player.dir/tictoc.cpp.o
+.PHONY : tictoc.cpp.o
+
+tictoc.i: tictoc.cpp.i
+.PHONY : tictoc.i
+
+# target to preprocess a source file
+tictoc.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/player.dir/build.make CMakeFiles/player.dir/tictoc.cpp.i
+.PHONY : tictoc.cpp.i
+
+tictoc.s: tictoc.cpp.s
+.PHONY : tictoc.s
+
+# target to generate assembly for a file
+tictoc.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/player.dir/build.make CMakeFiles/player.dir/tictoc.cpp.s
+.PHONY : tictoc.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -228,6 +252,9 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... tictoc.o"
+	@echo "... tictoc.i"
+	@echo "... tictoc.s"
 .PHONY : help
 
 
