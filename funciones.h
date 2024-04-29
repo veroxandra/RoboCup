@@ -17,6 +17,7 @@ struct Posicion{
 struct Jugador{
     int numero;
     int equipo;
+    string accion;
 };
 struct Lectura{
    string porteria_der;
@@ -25,8 +26,6 @@ struct Lectura{
 };
 
 vector<string> referee = {"goal_l_", "goal_r_", "time_up", "half_time", "foul_r", "foul_l", "goalie_catch_ball_r", "goalie_catch_ball_l"};
-
-vector<string> tipo_de_mensajes = {"see", "sense_body"};
 
 vector<string> play_modes = {"before_kick_off", "play_on", "time_over", "kick_off_l", "kick_off_r", "corner_kick_l", "corner_kick_r", "goal_kick_r", "goal_kick_l"};
 
@@ -206,6 +205,51 @@ void PosicionarJugador(Jugador jugador, MinimalSocket::Address server_udp,Minima
 
 }
 
+
+Jugador &parseSeverMessage(const string &message, Jugador &player)
+{
+    auto messages = dividir_en_palabras_parentesis(message);
+
+    for (string message : messages)
+    {
+
+        if (message == ("see"))
+        {
+            // extract time from messages
+            player = parseMatchData(message, player);
+            player = parseSeeMessage(message, player);
+        }
+        else if (message == ("sense_body"))
+        {
+            // extract time from messages
+            player = parseMatchData(message, player);
+            // TODO
+        }
+        else if (message == ("hear"))
+        {
+            // extract time from messages
+            player = parseMatchData(message, player);
+            // TODO
+        }
+        else if (message == ("change_player_type") || message == ("ok"))
+        {
+            // TODO
+        }
+        else if (message == ("player_type"))
+        {
+            // TODO
+        }
+        else if (message == ("player_param"))
+        {
+            // TODO
+        }
+        else
+        {
+            cout << "Message not recognized: " << message << endl;
+        }
+    }
+    return player;
+}
 
 #endif // FUNCIONES_H
 
