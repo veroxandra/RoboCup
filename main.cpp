@@ -55,9 +55,14 @@ int main(int argc, char* argv[])
         MinimalSocket::Address server_udp = MinimalSocket::Address{"127.0.0.1", other_sender_udp.getPort()};
 
         PosicionarJugador(jugador, server_udp,udp_socket,argumentoString);
+        clock.tic();
 
         while (true)
         {
+            while (clock.toc() < 100){
+                std::this_thread::sleep_for(std::crono:milliseconds(1));
+                }
+            clock.tic();
             auto received_message = udp_socket.receive(message_max_size);
             std::string received_message_content = received_message->received_message;
             string contenido = received_message_content.substr(1, received_message_content.size() - 2);
@@ -65,6 +70,9 @@ int main(int argc, char* argv[])
             vector<string> cadenas = dividir_en_palabras_parentesis(contenido);
             //cadenas.push_back(tipo);
             cadenas.insert(cadenas.begin(), tipo); // Inserta la primera palabra al principio del vector
+
+
+            auto Estructura = ClasificaDatos<string>(tipo, cadenas);
             vector<string> valor,vectoria,valor2,porteria;
             if(tipo=="see"&&jugador.numero!=1){
                 bool bola=false;

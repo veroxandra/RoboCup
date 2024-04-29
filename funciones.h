@@ -19,7 +19,11 @@ struct Jugador{
     int numero;
     int equipo;
 };
-
+struct Lectura{
+   string porteria_der;
+   string porteria_izq;
+   string pelota;
+};
 
 vector<string> vectorpalabras(string const &ejercicio){
   vector<string> resultado;
@@ -100,6 +104,43 @@ vector<string> encontrarStringConPrefijo(const string& str, const string& prefij
     return vectorpalabras(""); // Retorna una cadena vacía si no se encuentra el prefijo
 }
 
+
+
+
+template<typename T>
+Lectura ClasificaDatos (string &tipo, vector<string>  &cadenas) {
+    vector<string> valor,vectoria,valor2,valor3;
+    Lectura lectura;
+    if(tipo=="see"){
+        //cout<<"Encontrado el see"<<endl;
+        for(auto parentesis:cadenas){
+            //cout<<parentesis<<endl;
+            valor=encontrarStringConPrefijo(parentesis,"(b)");//Buscar en todos los parentesis el de (b)
+            valor2=encontrarStringConPrefijo(parentesis,"(g r)");//Buscar en todos los parentesis el de (g r)
+            valor3=encontrarStringConPrefijo(parentesis,"(g l)");//Buscar en todos los parentesis el de (g l)
+
+            if(valor2.size()>1){
+
+                lectura.porteria_der=(valor2.at(3));
+
+            }
+            if(valor3.size()>1){
+
+                lectura.porteria_izq=(valor3.at(3));
+
+
+            }
+            if(valor.size()>1){
+
+                lectura.pelota=(valor.at(1));
+                            }
+        }
+        return lectura;
+    }
+    return lectura;
+
+}
+
 void PosicionarJugador(Jugador jugador, MinimalSocket::Address server_udp,MinimalSocket::udp::Udp<true>& udp_socket,string argumentoString) {
     vector<Posicion> posiciones={{50,0},{35,-20},{35,20},{20,-25},{18,-9},{18,5},{20,20},{2,-18},{28,-18},{35,11},{5,0}};
     //if(vectorpalabras(received_message_content).at(1)=="l"){
@@ -166,6 +207,7 @@ void PosicionarJugador(Jugador jugador, MinimalSocket::Address server_udp,Minima
     }
 
 }
+
 
 #endif // FUNCIONES_H
 
