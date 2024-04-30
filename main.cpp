@@ -11,6 +11,8 @@ using namespace std;
 
 string Estado;
 Jugador jugador;
+vector<string> play_modes = {"before_kick_off", "play_on", "time_over", "kick_off_l", "kick_off_r", "corner_kick_l", "corner_kick_r", "goal_kick_r", "goal_kick_l"};
+
 
 int main(int argc, char* argv[])
 {

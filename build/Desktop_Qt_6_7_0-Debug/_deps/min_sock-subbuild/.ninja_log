@@ -1,0 +1,21 @@
+# ninja log v5
+0	4	1714467484333224469	min_sock-populate-prefix/src/min_sock-populate-stamp/min_sock-populate-mkdir	eabe71612bee0e35
+0	4	1714467484333224469	/home/verooo/Escritorio/RoboCup/build/Desktop_Qt_6_7_0-Debug/_deps/min_sock-subbuild/min_sock-populate-prefix/src/min_sock-populate-stamp/min_sock-populate-mkdir	eabe71612bee0e35
+4	1828	1714467486157270138	min_sock-populate-prefix/src/min_sock-populate-stamp/min_sock-populate-download	eeb300eb472c2424
+4	1828	1714467486157270138	/home/verooo/Escritorio/RoboCup/build/Desktop_Qt_6_7_0-Debug/_deps/min_sock-subbuild/min_sock-populate-prefix/src/min_sock-populate-stamp/min_sock-populate-download	eeb300eb472c2424
+1828	2382	0	min_sock-populate-prefix/src/min_sock-populate-stamp/min_sock-populate-update	27097753683365f9
+1828	2382	0	/home/verooo/Escritorio/RoboCup/build/Desktop_Qt_6_7_0-Debug/_deps/min_sock-subbuild/min_sock-populate-prefix/src/min_sock-populate-stamp/min_sock-populate-update	27097753683365f9
+2382	2387	1714467486717284159	min_sock-populate-prefix/src/min_sock-populate-stamp/min_sock-populate-patch	b4dc9463a61e1d3b
+2382	2387	1714467486717284159	/home/verooo/Escritorio/RoboCup/build/Desktop_Qt_6_7_0-Debug/_deps/min_sock-subbuild/min_sock-populate-prefix/src/min_sock-populate-stamp/min_sock-populate-patch	b4dc9463a61e1d3b
+2387	2392	1714467486721284259	min_sock-populate-prefix/src/min_sock-populate-stamp/min_sock-populate-configure	1fa2d4821a0bcc3
+2387	2392	1714467486721284259	/home/verooo/Escritorio/RoboCup/build/Desktop_Qt_6_7_0-Debug/_deps/min_sock-subbuild/min_sock-populate-prefix/src/min_sock-populate-stamp/min_sock-populate-configure	1fa2d4821a0bcc3
+2392	2397	1714467486725284359	min_sock-populate-prefix/src/min_sock-populate-stamp/min_sock-populate-build	79690776c55c067c
+2392	2397	1714467486725284359	/home/verooo/Escritorio/RoboCup/build/Desktop_Qt_6_7_0-Debug/_deps/min_sock-subbuild/min_sock-populate-prefix/src/min_sock-populate-stamp/min_sock-populate-build	79690776c55c067c
+2397	2402	1714467486733284559	min_sock-populate-prefix/src/min_sock-populate-stamp/min_sock-populate-install	22b9e845d9ee7b44
+2397	2402	1714467486733284559	/home/verooo/Escritorio/RoboCup/build/Desktop_Qt_6_7_0-Debug/_deps/min_sock-subbuild/min_sock-populate-prefix/src/min_sock-populate-stamp/min_sock-populate-install	22b9e845d9ee7b44
+2402	2407	1714467486737284660	min_sock-populate-prefix/src/min_sock-populate-stamp/min_sock-populate-test	2d99b23943d6597
+2402	2407	1714467486737284660	/home/verooo/Escritorio/RoboCup/build/Desktop_Qt_6_7_0-Debug/_deps/min_sock-subbuild/min_sock-populate-prefix/src/min_sock-populate-stamp/min_sock-populate-test	2d99b23943d6597
+2407	2414	1714467486745284860	CMakeFiles/min_sock-populate-complete	e98abda669da34
+2407	2414	1714467486745284860	min_sock-populate-prefix/src/min_sock-populate-stamp/min_sock-populate-done	e98abda669da34
+2407	2414	1714467486745284860	/home/verooo/Escritorio/RoboCup/build/Desktop_Qt_6_7_0-Debug/_deps/min_sock-subbuild/CMakeFiles/min_sock-populate-complete	e98abda669da34
+2407	2414	1714467486745284860	/home/verooo/Escritorio/RoboCup/build/Desktop_Qt_6_7_0-Debug/_deps/min_sock-subbuild/min_sock-populate-prefix/src/min_sock-populate-stamp/min_sock-populate-done	e98abda669da34

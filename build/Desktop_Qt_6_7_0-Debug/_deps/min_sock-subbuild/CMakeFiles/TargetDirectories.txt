@@ -1,0 +1,3 @@
+/home/verooo/Escritorio/RoboCup/build/Desktop_Qt_6_7_0-Debug/_deps/min_sock-subbuild/CMakeFiles/min_sock-populate.dir
+/home/verooo/Escritorio/RoboCup/build/Desktop_Qt_6_7_0-Debug/_deps/min_sock-subbuild/CMakeFiles/edit_cache.dir
+/home/verooo/Escritorio/RoboCup/build/Desktop_Qt_6_7_0-Debug/_deps/min_sock-subbuild/CMakeFiles/rebuild_cache.dir

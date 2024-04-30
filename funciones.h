@@ -20,14 +20,13 @@ struct Jugador{
     string accion;
 };
 struct Lectura{
+   string tipo;
    string porteria_der;
    string porteria_izq;
    string pelota;
 };
 
 vector<string> referee = {"goal_l_", "goal_r_", "time_up", "half_time", "foul_r", "foul_l", "goalie_catch_ball_r", "goalie_catch_ball_l"};
-
-vector<string> play_modes = {"before_kick_off", "play_on", "time_over", "kick_off_l", "kick_off_r", "corner_kick_l", "corner_kick_r", "goal_kick_r", "goal_kick_l"};
 
 vector<string> vectorpalabras(string const &ejercicio){
   vector<string> resultado;
@@ -210,25 +209,40 @@ Jugador &parseSeverMessage(const string &message, Jugador &player)
 {
     auto messages = dividir_en_palabras_parentesis(message);
 
+    Lectura lectura;
+
     for (string message : messages)
     {
-
         if (message == ("see"))
         {
-            // extract time from messages
-            player = parseMatchData(message, player);
-            player = parseSeeMessage(message, player);
+            for(auto parentesis:messages){
+
+                auto valor=encontrarStringConPrefijo(parentesis,"(b)");//Buscar en todos los parentesis el de (b)
+                auto valor2=encontrarStringConPrefijo(parentesis,"(g r)");//Buscar en todos los parentesis el de (g r)
+                auto valor3=encontrarStringConPrefijo(parentesis,"(g l)");//Buscar en todos los parentesis el de (g l)
+
+                if(valor2.size()>1){
+
+                    lectura.porteria_der=(valor2.at(3));
+                }
+                if(valor3.size()>1){
+
+                    lectura.porteria_izq=(valor3.at(3));
+                }
+                if(valor.size()>1){
+
+                    lectura.pelota=(valor.at(1));
+                }
+            }
         }
         else if (message == ("sense_body"))
         {
             // extract time from messages
-            player = parseMatchData(message, player);
             // TODO
         }
         else if (message == ("hear"))
         {
             // extract time from messages
-            player = parseMatchData(message, player);
             // TODO
         }
         else if (message == ("change_player_type") || message == ("ok"))
@@ -242,6 +256,10 @@ Jugador &parseSeverMessage(const string &message, Jugador &player)
         else if (message == ("player_param"))
         {
             // TODO
+        }
+        else if (message == ("fullstate"))
+        {
+            //TODO
         }
         else
         {
