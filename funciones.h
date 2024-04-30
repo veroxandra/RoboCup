@@ -23,14 +23,18 @@ struct Lectura{
    string tipo;
    string porteria_der;
    string porteria_der_dist;
-
    string porteria_izq;
    string porteria_izq_dist;
-
    string pelota;
    string pelota_angle;
-   string amigo;
-   string amigo2;
+   vector<string> direccionamigo;
+   vector<string> direccionamigo2;
+   vector<string> distamigo;
+   vector<string> distamigo2;
+};
+struct Decision{
+    string direccion;
+    string distancia;
 };
 
 vector<string> vectorpalabras(string const &ejercicio){
@@ -142,10 +146,13 @@ Lectura ClasificaDatos (string &tipo, vector<string>  &cadenas) {
                 lectura.pelota_angle=(valor.at(2));
             }
             if(valor4.size()>1){
-                lectura.amigo=(valor4.at(3));
+                lectura.direccionamigo.push_back(valor4.at(3));
+                lectura.distamigo.push_back(valor4.at(2));
             }
             if(valor5.size()>1){
-                lectura.amigo2=(valor5.at(3));
+                lectura.direccionamigo2.push_back(valor5.at(3));
+                lectura.distamigo2.push_back(valor5.at(2));
+
             }
         }
     }else{
@@ -154,11 +161,13 @@ Lectura ClasificaDatos (string &tipo, vector<string>  &cadenas) {
         lectura.pelota="";
         lectura.pelota_angle="";
         lectura.tipo="";
-        lectura.amigo="";
-        lectura.amigo2="";
+        lectura.direccionamigo.clear();
+        lectura.direccionamigo2.clear();
+        lectura.distamigo2.clear();
+        lectura.distamigo2.clear();
+
         lectura.porteria_der_dist="";
         lectura.porteria_izq_dist="";
-
     }
     return lectura;
 }
@@ -168,7 +177,6 @@ void PosicionarJugador(Jugador jugador, MinimalSocket::Address server_udp,Minima
     for(auto &p:posiciones){
         p.x=-p.x;
     }
-
     switch(jugador.numero){
     case 1:
         udp_socket.sendTo(crearMove(posiciones.at(0)), server_udp);
@@ -227,17 +235,46 @@ void PosicionarJugador(Jugador jugador, MinimalSocket::Address server_udp,Minima
     }
 
 }
+
+Decision DetectarMasCercano(vector<string> direcciones, vector<string> distancias){
+    Decision MasCercano;
+    double dist=1000;
+    int i=0;
+        for(auto elem:direcciones){
+            if(stod(elem)<dist){
+                MasCercano.distancia=elem;
+                MasCercano.direccion=direcciones.at(i);
+            }
+            i++;
+        }
+    return MasCercano;
+}
+
+bool MasCercaBola(vector<string> direcciones, vector<string> distancias,double dist){
+        for(auto elem:distancias){
+            if(stod(elem)-dist<dist){
+                return false;
+            }
+        }
+    return true;
+}
+
+
+
 void Accion (const Jugador &jugador,Lectura const &Data, MinimalSocket::Address server_udp,MinimalSocket::udp::Udp<true>& udp_socket){
     string vectoria,valor2,valor3, porteria,valorpase,distPor;
+    Decision pase;
     if(Data.tipo=="see"){
         bool bola=false;
             if(jugador.equipo==-1){
+                pase=DetectarMasCercano(Data.direccionamigo2,Data.distamigo2);
                 valor2=Data.porteria_der;//Buscar en todos los parentesis el de (g r)
-                valorpase=Data.amigo2;
+                valorpase=pase.direccion;//Funcion para obtener el mas cercano
                 valor3=Data.porteria_der_dist;//Buscar en todos los parentesis el de (g r)
             }else if(jugador.equipo==1){
+                pase=DetectarMasCercano(Data.direccionamigo,Data.distamigo);
                 valor2=Data.porteria_izq;//Buscar en todos los parentesis el de (g l)
-                valorpase=Data.amigo;
+                valorpase=pase.direccion;;//Funcion para obtener el mas cercano
                 valor3=Data.porteria_izq_dist;//Buscar en todos los parentesis el de (g r)
             }
             if(valor2!=""){
@@ -246,21 +283,26 @@ void Accion (const Jugador &jugador,Lectura const &Data, MinimalSocket::Address 
             }
             if(Data.pelota!=""){
                 bola = true;
-
                 double variable=stod(Data.pelota);
                 if(variable<0.6&&porteria!=""&&stod(distPor)<50){
                     cout<<"Patadon a la direccion:"<<porteria<<endl;
                     udp_socket.sendTo("(kick 30 "+porteria+")", server_udp);
-                }else if(variable<0.6&&valorpase!=""){
+                }else if(variable<0.6&&porteria==""){//Tengo el balon y no veo la porteria
+                    udp_socket.sendTo("(kick 50 180)", server_udp);
+                    this_thread::sleep_for(std::chrono::milliseconds(150));
+                    udp_socket.sendTo("(turn 180)", server_udp);
+                    this_thread::sleep_for(std::chrono::milliseconds(150));}
+                else if(variable<0.6&&valorpase!=""){
                     cout<<"Pasecito a la direccion:"<<valorpase<<endl;
-                    udp_socket.sendTo("(kick 30 "+valorpase+")", server_udp);
-                }else if(variable<0.6&&porteria!=""){
-                    cout<<"Patadon a la direccion:"<<porteria<<endl;
-                    udp_socket.sendTo("(kick 30 "+porteria+")", server_udp);
+                    udp_socket.sendTo("(kick 50 "+valorpase+")", server_udp);
+                }else if(variable<0.6&&porteria!=""){//Tengo el balon y veo la porteria
+                    udp_socket.sendTo("(kick 50 "+porteria+")", server_udp);
                 }
-                else if(stod(Data.pelota_angle)>20){
+                else if(abs(stod(Data.pelota_angle))>20){
                     udp_socket.sendTo("(turn "+Data.pelota_angle+")", server_udp);
-                }else{
+                }else if(jugador.equipo==-1&&MasCercaBola(Data.direccionamigo2,Data.distamigo2,variable)){
+                    udp_socket.sendTo("(dash 50 "+Data.pelota_angle+")", server_udp);
+                }else if(jugador.equipo==1&&MasCercaBola(Data.direccionamigo,Data.distamigo,variable)){
                     udp_socket.sendTo("(dash 50 "+Data.pelota_angle+")", server_udp);
                 }
             }

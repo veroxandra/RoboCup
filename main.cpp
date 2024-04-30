@@ -69,9 +69,6 @@ int main(int argc, char* argv[])
             string contenido = received_message_content.substr(1, received_message_content.size() - 2);
             auto tipo=obtenerPrimeraPalabra(contenido);
             vector<string> cadenas = dividir_en_palabras_parentesis(contenido);
-            cout <<tipo<<endl;
-            if(tipo!="sense_body"&&tipo!="see")
-            cout << received_message_content<<endl;
             //cadenas.push_back(tipo);
             cadenas.insert(cadenas.begin(), tipo); // Inserta la primera palabra al principio del vector
             auto Estructura = ClasificaDatos<string>(tipo, cadenas);
