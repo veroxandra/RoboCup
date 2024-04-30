@@ -106,9 +106,6 @@ vector<string> encontrarStringConPrefijo(const string& str, const string& prefij
     return vectorpalabras(""); // Retorna una cadena vacía si no se encuentra el prefijo
 }
 
-
-
-
 template<typename T>
 Lectura ClasificaDatos (string &tipo, vector<string>  &cadenas) {
     vector<string> valor,vectoria,valor2,valor3;
@@ -131,14 +128,28 @@ Lectura ClasificaDatos (string &tipo, vector<string>  &cadenas) {
                 lectura.pelota_angle=(valor.at(2));
             }
         }
-    }else{
-        lectura.porteria_der="";
-        lectura.porteria_izq="";
-        lectura.pelota="";
-        lectura.pelota_angle="";
-        lectura.tipo="";
-    }
-    return lectura;
+    // }else{
+    //     lectura.porteria_der="";
+    //     lectura.porteria_izq="";
+    //     lectura.pelota="";
+    //     lectura.pelota_angle="";
+    //     lectura.tipo="";
+    // }
+    }else if (tipo == "hear"){ //(hear 411 referee goal_l_1)
+        lectura.tipo="hear";
+        for(auto parentesis : cadenas){
+
+        }
+    }else if (tipo == "sense_body"){
+
+    }else if (tipo == "player_param"){
+
+    }else if (tipo == "player_type"){
+
+    }else if ((tipo == "change_player_type") || (tipo == "ok")){
+
+    }else
+        cout << "Mensaje no reconocido: " << tipo << endl;
 }
 
 void PosicionarJugador(Jugador jugador, MinimalSocket::Address server_udp,MinimalSocket::udp::Udp<true>& udp_socket,string argumentoString) {
