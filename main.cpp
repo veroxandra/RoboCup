@@ -10,10 +10,12 @@
 
 using namespace std;
 
+
+
 int main(int argc, char* argv[])
 {
     TicToc clock;
-    int num;
+    Lectura Estructura;
     string argumentoString = argv[2];
     MinimalSocket::Port this_socket_port = atoi(argv[0]);
     cout << "Creating a UDP socket" << endl;
@@ -71,8 +73,8 @@ int main(int argc, char* argv[])
             vector<string> cadenas = dividir_en_palabras_parentesis(contenido);
             //cadenas.push_back(tipo);
             cadenas.insert(cadenas.begin(), tipo); // Inserta la primera palabra al principio del vector
-            auto Estructura = ClasificaDatos<string>(tipo, cadenas);
-            Accion ( jugador,Estructura, server_udp, udp_socket);
+            Estructura = ClasificaDatos<string>(tipo, cadenas);
+            Estructura = Accion ( jugador,Estructura, server_udp, udp_socket);
         }
         return 0;
     }
