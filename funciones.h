@@ -17,13 +17,13 @@ struct Posicion{
 struct Jugador{
     int numero;
     int equipo;
-    string accion;
 };
 struct Lectura{
-   string tipo;
-   string porteria_der;
-   string porteria_izq;
-   string pelota;
+    string tipo;
+    string porteria_der;
+    string porteria_izq;
+    string pelota;
+    string pelota_angle;
 };
 
 vector<string> referee = {"goal_l_", "goal_r_", "time_up", "half_time", "foul_r", "foul_l", "goalie_catch_ball_r", "goalie_catch_ball_l"};
@@ -107,34 +107,96 @@ vector<string> encontrarStringConPrefijo(const string& str, const string& prefij
     return vectorpalabras(""); // Retorna una cadena vacía si no se encuentra el prefijo
 }
 
-template<typename T>
 Lectura ClasificaDatos (string &tipo, vector<string>  &cadenas) {
     vector<string> valor,vectoria,valor2,valor3;
     Lectura lectura;
     if(tipo=="see"){
+        lectura.tipo="see";
         for(auto parentesis:cadenas){
-
             valor=encontrarStringConPrefijo(parentesis,"(b)");//Buscar en todos los parentesis el de (b)
             valor2=encontrarStringConPrefijo(parentesis,"(g r)");//Buscar en todos los parentesis el de (g r)
             valor3=encontrarStringConPrefijo(parentesis,"(g l)");//Buscar en todos los parentesis el de (g l)
 
             if(valor2.size()>1){
-
                 lectura.porteria_der=(valor2.at(3));
             }
             if(valor3.size()>1){
-
                 lectura.porteria_izq=(valor3.at(3));
             }
             if(valor.size()>1){
-
                 lectura.pelota=(valor.at(1));
+                lectura.pelota_angle=(valor.at(2));
             }
         }
-        return lectura;
-    }
-    return lectura;
+    }else if (tipo == "hear"){ //(hear 411 referee goal_l_1)
+        lectura.tipo="hear";
+        if (cadenas.size() == 1)
+            valor = encontrarStringConPrefijo(cadenas[0], "goal");
 
+
+    }else if (tipo == "sense_body"){
+        lectura.tipo="sense_body";
+
+    }else if (tipo == "player_param"){
+        lectura.tipo="play_param";
+
+    }else if (tipo == "player_type"){
+        lectura.tipo="player_type";
+
+    }else if ((tipo == "change_player_type") || (tipo == "ok")){
+        lectura.tipo="change_player_type";
+
+    }else
+        cout << "Mensaje no reconocido: " << tipo << endl;
+        lectura.porteria_der="";
+        lectura.porteria_izq="";
+        lectura.pelota="";
+        lectura.pelota_angle="";
+        lectura.tipo="";
+}
+
+Lectura Accion (const Jugador &jugador,Lectura &Data, MinimalSocket::Address server_udp,MinimalSocket::udp::Udp<true>& udp_socket){
+    string vectoria,valor2,valor3, porteria;
+    if(Data.tipo=="see"){
+        bool bola=false;
+        if(jugador.equipo==-1&&Data.porteria_der!=""){
+            valor2=Data.porteria_der;//Buscar en todos los parentesis el de (g r)
+        }else if(jugador.equipo==1&&Data.porteria_izq!=""){
+            valor2=Data.porteria_izq;//Buscar en todos los parentesis el de (g l)
+        }
+        if(valor2!=""){
+            porteria=valor2;
+        }
+        if(Data.pelota!=""){
+            bola = true;
+            cout <<"Valor pelota:"<<Data.pelota;
+            cout <<vectoria<<endl;
+            double variable=stod(Data.pelota);
+            //cout <<"La variable transformada es:"<<variable<<endl;
+            if(variable<0.6&&porteria!=""){
+                cout<<"Patadon a la direccion:"<<porteria<<endl;
+                udp_socket.sendTo("(kick 30 "+porteria+")", server_udp);
+            }else if(variable<0.6&&porteria==""){
+                cout<<"Apunta a la porteria:"<<endl;
+                udp_socket.sendTo("(turn 90)", server_udp);
+                this_thread::sleep_for(std::chrono::milliseconds(150));
+                udp_socket.sendTo("(dash 50 0)", server_udp);
+                this_thread::sleep_for(std::chrono::milliseconds(150));
+            }else if(stod(Data.pelota_angle)>30){
+                udp_socket.sendTo("(turn "+Data.pelota_angle+")", server_udp);
+            }else{
+                udp_socket.sendTo("(dash 50 "+Data.pelota_angle+")", server_udp);
+                //udp_socket.sendTo("(dash 50 0)", server_udp);
+            }
+        }
+        if(!bola){
+
+            udp_socket.sendTo("(turn 30)", server_udp);
+
+        }
+
+    }
+    return Data;
 }
 
 void PosicionarJugador(Jugador jugador, MinimalSocket::Address server_udp,MinimalSocket::udp::Udp<true>& udp_socket,string argumentoString) {
@@ -204,70 +266,6 @@ void PosicionarJugador(Jugador jugador, MinimalSocket::Address server_udp,Minima
 
 }
 
-
-Jugador &parseSeverMessage(const string &message, Jugador &player)
-{
-    auto messages = dividir_en_palabras_parentesis(message);
-
-    Lectura lectura;
-
-    for (string message : messages)
-    {
-        if (message == ("see"))
-        {
-            for(auto parentesis:messages){
-
-                auto valor=encontrarStringConPrefijo(parentesis,"(b)");//Buscar en todos los parentesis el de (b)
-                auto valor2=encontrarStringConPrefijo(parentesis,"(g r)");//Buscar en todos los parentesis el de (g r)
-                auto valor3=encontrarStringConPrefijo(parentesis,"(g l)");//Buscar en todos los parentesis el de (g l)
-
-                if(valor2.size()>1){
-
-                    lectura.porteria_der=(valor2.at(3));
-                }
-                if(valor3.size()>1){
-
-                    lectura.porteria_izq=(valor3.at(3));
-                }
-                if(valor.size()>1){
-
-                    lectura.pelota=(valor.at(1));
-                }
-            }
-        }
-        else if (message == ("sense_body"))
-        {
-            // extract time from messages
-            // TODO
-        }
-        else if (message == ("hear"))
-        {
-            // extract time from messages
-            // TODO
-        }
-        else if (message == ("change_player_type") || message == ("ok"))
-        {
-            // TODO
-        }
-        else if (message == ("player_type"))
-        {
-            // TODO
-        }
-        else if (message == ("player_param"))
-        {
-            // TODO
-        }
-        else if (message == ("fullstate"))
-        {
-            //TODO
-        }
-        else
-        {
-            cout << "Message not recognized: " << message << endl;
-        }
-    }
-    return player;
-}
 
 #endif // FUNCIONES_H
 
