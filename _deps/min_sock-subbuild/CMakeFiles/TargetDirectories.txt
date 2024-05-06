@@ -1,3 +1,0 @@
-/home/jose/Desktop/Robocup/Robocup/_deps/min_sock-subbuild/CMakeFiles/min_sock-populate.dir
-/home/jose/Desktop/Robocup/Robocup/_deps/min_sock-subbuild/CMakeFiles/edit_cache.dir
-/home/jose/Desktop/Robocup/Robocup/_deps/min_sock-subbuild/CMakeFiles/rebuild_cache.dir
